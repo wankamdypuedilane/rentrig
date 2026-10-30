@@ -24,6 +24,9 @@ alter default privileges in schema public grant all on tables to anon, authentic
 alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 
+-- Supabase installs extensions such as btree_gist in their own schema.
+create schema if not exists extensions;
+
 create schema if not exists auth;
 grant usage on schema auth to anon, authenticated, service_role;
 
