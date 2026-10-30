@@ -27,6 +27,11 @@ export async function asUser<T>(client: Client, userId: string, fn: () => Promis
   return withRole(client, "authenticated", { sub: userId, role: "authenticated" }, fn);
 }
 
+/** Runs `fn` as trusted server code (role `service_role`, the secret key), then rolls back. */
+export async function asService<T>(client: Client, fn: () => Promise<T>) {
+  return withRole(client, "service_role", { role: "service_role" }, fn);
+}
+
 /** Runs `fn` as an anonymous visitor (role `anon`), then rolls back. */
 export async function asAnon<T>(client: Client, fn: () => Promise<T>) {
   return withRole(client, "anon", { role: "anon" }, fn);
@@ -34,7 +39,7 @@ export async function asAnon<T>(client: Client, fn: () => Promise<T>) {
 
 async function withRole<T>(
   client: Client,
-  role: "anon" | "authenticated",
+  role: "anon" | "authenticated" | "service_role",
   claims: Record<string, string>,
   fn: () => Promise<T>,
 ): Promise<T> {
