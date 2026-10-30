@@ -1,0 +1,10 @@
+node_modules/
+.env*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+coverage/
+.next/
+*.tsbuildinfo
+.claude/settings.local.json
+CLAUDE.local.md
