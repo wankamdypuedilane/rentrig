@@ -168,6 +168,10 @@ describe("payment confirmation", () => {
       expect(await confirm(tooLate, "cs_test_too_late", "pi_test_too_late")).toBe("refund_needed");
       expect(await reservation(tooLate)).toMatchObject({ status: "cancelled", refund_due_cents: 16500 });
       expect(await payments(tooLate)).toHaveLength(1);
+      // The same event again (Stripe retries, or the success page): still a refund, never "confirmed".
+      expect(await confirm(tooLate, "cs_test_too_late", "pi_test_too_late")).toBe("refund_needed");
+      expect(await confirm(late, "cs_test_late", "pi_test_late")).toBe("already_confirmed");
+      expect(await payments(tooLate)).toHaveLength(1);
     });
   });
 });
